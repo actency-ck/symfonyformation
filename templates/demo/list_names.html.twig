@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ previous_name }}</h1>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for name in names %}
+            <li class="list-group-item">
+                <a href="{{ path('details', {'name': name})}}">{{ name|upper }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <pre>Route from controller: {{ route }}</pre>
+    <pre>Route from view: {{ app.request.attributes.get('_route') }}</pre>
+</div>
+{% endblock %}
