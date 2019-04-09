@@ -21,5 +21,6 @@
     </div>
     <pre>Route from controller: {{ route }}</pre>
     <pre>Route from view: {{ app.request.attributes.get('_route') }}</pre>
+    <p>{{ names|convert_to_string('-') }}</p>
 </div>
 {% endblock %}
