@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DemoController extends AbstractController
 {
@@ -33,12 +34,14 @@ class DemoController extends AbstractController
   /**
    * @Route("/list-names", name="list_names")
    */
-    public function listNames(SessionInterface $session, Request $request)
+    public function listNames(SessionInterface $session, Request $request, TranslatorInterface $translator)
     {
+      $hello = $translator->trans('hello');
       $route = $request->get('_route');
       $previous_name = $session->get('name');
-      $names = ['John', 'Smaine', 'Fabien', 'Nicolas'];
+      $names = ['John', 'Smaine', 'Fabien', 'Nicolas', 'Christophe'];
       return $this->render('demo/list_names.html.twig', [
+        'hello' => $hello,
         'route' => $route,
         'previous_name' => $previous_name,
         'names' => $names,
