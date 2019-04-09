@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DemoController extends AbstractController
 {
@@ -55,6 +58,42 @@ class DemoController extends AbstractController
         'route' => $route,
         'previous_name' => $previous_name,
         'names' => $names,
+      ]);
+    }
+
+  /**
+   * @Route("/add-task", name="add_task")
+   */
+    public function addTask(Request $request, SessionInterface $session)
+    {
+      $task = new Task();
+      $task->setName('Faire les courses');
+
+      $form = $this->createFormBuilder($task)
+        ->add('name', TextType::class)
+        ->add('due_date', DateType::class)
+        ->add('save', SubmitType::class, ['label' => 'Create Task'])
+        ->getForm();
+
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        $session->set('task', $form->getData());
+        return $this->redirectToRoute('show_task');
+      }
+
+      return $this->render('demo/add_task.html.twig', [
+        'form' => $form->createView(),
+      ]);
+    }
+
+  /**
+   * @Route("/show-task", name="show_task")
+   */
+    public function showTask(SessionInterface $session)
+    {
+      $task = $session->get('task');
+      return $this->render('demo/show_task.html.twig', [
+        'task' => $task,
       ]);
     }
 
