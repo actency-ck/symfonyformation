@@ -40,7 +40,7 @@ class DemoController extends AbstractController
     }
 
   /**
-   * @Route("/list-names", name="list_names")
+   * @Route("/{_locale}/list-names", name="list_names", requirements={"_locale": "en|fr"})
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    * @param \Symfony\Component\HttpFoundation\Request $request
    *
