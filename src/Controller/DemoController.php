@@ -10,8 +10,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DemoController extends AbstractController
 {
+
   /**
    * @Route("/demo/{name}", name="demo")
+   * @param $name
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
    */
     public function index($name)
     {
@@ -22,6 +26,10 @@ class DemoController extends AbstractController
 
   /**
    * @Route("/details/{name}", name="details")
+   * @param $name
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
    */
     public function details($name, SessionInterface $session)
     {
@@ -33,15 +41,17 @@ class DemoController extends AbstractController
 
   /**
    * @Route("/list-names", name="list_names")
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
    */
-    public function listNames(SessionInterface $session, Request $request, TranslatorInterface $translator)
+    public function listNames(SessionInterface $session, Request $request)
     {
-      $hello = $translator->trans('hello');
       $route = $request->get('_route');
       $previous_name = $session->get('name');
       $names = ['John', 'Smaine', 'Fabien', 'Nicolas', 'Christophe'];
       return $this->render('demo/list_names.html.twig', [
-        'hello' => $hello,
         'route' => $route,
         'previous_name' => $previous_name,
         'names' => $names,
