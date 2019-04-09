@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Form\Type\TaskType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,13 +65,12 @@ class DemoController extends AbstractController
     public function addTask(Request $request, SessionInterface $session)
     {
       $task = new Task();
-      $task->setName('Faire les courses');
 
-      $form = $this->createFormBuilder($task)
-        ->add('name', TextType::class)
-        ->add('due_date', DateType::class)
-        ->add('save', SubmitType::class, ['label' => 'Create Task'])
-        ->getForm();
+      if ($currentTask = $session->get('task')) {
+        $options['data'] = $currentTask;
+      }
+
+      $form = $this->createForm(TaskType::class, $task, $options);
 
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
