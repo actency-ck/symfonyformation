@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\GroupSequence;
+use Symfony\Component\Validator\GroupSequenceProviderInterface;
 
-class Task {
+class Task implements GroupSequenceProviderInterface {
 
   /**
    * @Assert\Length(
@@ -18,9 +20,10 @@ class Task {
 
   /**
    * @Assert\Date
-   * @var string A "Y-m-d" formatted value
    */
   private $dueDate;
+
+  protected $priority;
 
   /**
    * @return mixed
@@ -48,6 +51,30 @@ class Task {
    */
   public function setDueDate($dueDate): void {
     $this->dueDate = $dueDate;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPriority() {
+    return $this->priority;
+  }
+
+  /**
+   * @param mixed $priority
+   */
+  public function setPriority($priority): void {
+    $this->priority = $priority;
+  }
+
+  /**
+   * Returns which validation groups should be used for a certain state
+   * of the object.
+   *
+   * @return string[]|GroupSequence An array of validation groups
+   */
+  public function getGroupSequence() {
+    // TODO: Implement getGroupSequence() method.
   }
 
 }
