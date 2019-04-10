@@ -2,10 +2,24 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Task {
 
-  private $name;
+  /**
+   * @Assert\Length(
+   *      min = 2,
+   *      max = 50,
+   *      minMessage = "The name must be at least {{ limit }} characters long",
+   *      maxMessage = "The name cannot be longer than {{ limit }} characters"
+   * )
+   */
+  protected $name;
 
+  /**
+   * @Assert\Date
+   * @var string A "Y-m-d" formatted value
+   */
   private $dueDate;
 
   /**

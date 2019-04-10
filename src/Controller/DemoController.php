@@ -66,8 +66,9 @@ class DemoController extends AbstractController
     {
       $task = new Task();
 
+      $options = [];
       if ($currentTask = $session->get('task')) {
-        $options['data'] = $currentTask;
+        //$options['data'] = $currentTask;
       }
 
       $form = $this->createForm(TaskType::class, $task, $options);
