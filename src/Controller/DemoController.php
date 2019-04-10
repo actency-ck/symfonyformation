@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\Type\TaskType;
+use App\Services\SayHello;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -61,15 +62,16 @@ class DemoController extends AbstractController
 
   /**
    * @Route("/add-task", name="add_task")
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
    */
     public function addTask(Request $request, SessionInterface $session)
     {
       $task = new Task();
 
       $options = [];
-      if ($currentTask = $session->get('task')) {
-        //$options['data'] = $currentTask;
-      }
 
       $form = $this->createForm(TaskType::class, $task, $options);
 
@@ -86,12 +88,28 @@ class DemoController extends AbstractController
 
   /**
    * @Route("/show-task", name="show_task")
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
    */
     public function showTask(SessionInterface $session)
     {
       $task = $session->get('task');
       return $this->render('demo/show_task.html.twig', [
         'task' => $task,
+      ]);
+    }
+
+  /**
+   * @Route("/say-hello", name="say_hello")
+   * @param \App\Services\SayHello $sayHello
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
+    public function sayHello(SayHello $sayHello) {
+      $word = $sayHello->saySfIsGreat();
+      return $this->render('demo/say_hello.html.twig', [
+        'word' => $word,
       ]);
     }
 
