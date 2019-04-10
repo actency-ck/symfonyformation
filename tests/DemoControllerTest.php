@@ -3,15 +3,30 @@
 namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DemoControllerTest extends WebTestCase
 {
-    public function testSomething()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/say-hello');
+  /**
+   * @dataProvider urlProvider
+   */
+  public function testSomething($url, $code)
+  {
+    $client = static::createClient();
+    $crawler = $client->request('GET', $url);
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Symfony çay génial', $crawler->filter('h1')->text());
-    }
+    $this->assertSame($code, $client->getResponse()->getStatusCode());
+    //  $this->assertContains('Formulaire Task', $crawler->filter('h1')->text());
+    //  $client->followRedirect();
+
+  }
+
+  public function urlProvider()
+  {
+    return [
+      ['/add', Response::HTTP_OK],
+      ['/en/notFound', Response::HTTP_NOT_FOUND],
+    ];
+  }
+
 }
