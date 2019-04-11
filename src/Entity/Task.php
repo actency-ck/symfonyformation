@@ -27,6 +27,8 @@ class Task implements GroupSequenceProviderInterface {
 
   private $image;
 
+  private $author;
+
   /**
    * @return mixed
    */
@@ -91,6 +93,20 @@ class Task implements GroupSequenceProviderInterface {
    */
   public function setImage($image): void {
     $this->image = $image;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getAuthor() {
+    return $this->author;
+  }
+
+  /**
+   * @param mixed $author
+   */
+  public function setAuthor($author): void {
+    $this->author = $author;
   }
 
 }

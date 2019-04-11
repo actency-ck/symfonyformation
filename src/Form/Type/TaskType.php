@@ -38,6 +38,7 @@ class TaskType extends AbstractType
       ->add('image', FileType::class, [
         'label' => 'Image'
       ])
+      ->add('author', AuthorType::class)
       ->add('save', SubmitType::class);
   }
 
