@@ -36,7 +36,7 @@ class MaintenanceSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      KernelEvents::RESPONSE => 'methodCallOnKernelResponseEvent',
+      //KernelEvents::RESPONSE => 'methodCallOnKernelResponseEvent',
     ];
   }
 
