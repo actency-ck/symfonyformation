@@ -7,6 +7,7 @@ use App\Form\Type\TaskType;
 use App\Services\SayHello;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -111,6 +112,23 @@ class DemoController extends AbstractController
       return $this->render('demo/say_hello.html.twig', [
         'word' => $word,
       ]);
+    }
+
+  /**
+   * @Route("/send-mail", name="send_mail")
+   * @param \Swift_Mailer $swift_Mailer
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
+    public function sendMail(\Swift_Mailer $swift_Mailer) {
+      $message = (new \Swift_Message())
+        ->setFrom('noreply@actency.fr')
+        ->setTo('christophe.klein.67+symfony@gmail.com')
+        ->setSubject('Formation Symfony')
+        ->setBody('Envoyer un mail depuis Symfony');
+      $swift_Mailer->send($message);
+
+      return new Response('Email sent');
     }
 
 }
