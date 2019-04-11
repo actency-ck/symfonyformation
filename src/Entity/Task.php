@@ -25,6 +25,8 @@ class Task implements GroupSequenceProviderInterface {
 
   protected $priority;
 
+  private $image;
+
   /**
    * @return mixed
    */
@@ -75,6 +77,20 @@ class Task implements GroupSequenceProviderInterface {
    */
   public function getGroupSequence() {
     // TODO: Implement getGroupSequence() method.
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getImage() {
+    return $this->image;
+  }
+
+  /**
+   * @param mixed $image
+   */
+  public function setImage($image): void {
+    $this->image = $image;
   }
 
 }

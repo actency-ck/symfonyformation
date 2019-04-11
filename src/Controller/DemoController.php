@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Form\Type\TaskType;
 use App\Services\SayHello;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -77,7 +78,26 @@ class DemoController extends AbstractController
       $form = $this->createForm(TaskType::class, $task, $options);
 
       $form->handleRequest($request);
+
       if ($form->isSubmitted() && $form->isValid()) {
+        $file = $task->getImage();
+
+        $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+        // Move the file to the directory where brochures are stored
+        try {
+          $file->move(
+            $this->getParameter('images_directory'),
+            $fileName
+          );
+        } catch (FileException $e) {
+          // ... handle exception if something happens during file upload
+        }
+
+        // updates the 'brochure' property to store the PDF file name
+        // instead of its contents
+        $task->setImage($fileName);
+
         $session->set('task', $form->getData());
         return $this->redirectToRoute('show_task');
       }
@@ -129,6 +149,10 @@ class DemoController extends AbstractController
       $swift_Mailer->send($message);
 
       return new Response('Email sent');
+    }
+
+    public function generateUniqueFileName() {
+      return md5(uniqid());
     }
 
 }

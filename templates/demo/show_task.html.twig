@@ -1,4 +1,4 @@
 {% block body %}
-    {{ task.name }} le {{ task.due_date|date("m/d/Y") }}
+    {{ task.name }} le {{ task.duedate|date("m/d/Y") }}
     <a href="{{ path("add_task") }}">Modifier</a>
 {% endblock %}
