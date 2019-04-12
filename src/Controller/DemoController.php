@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\TaskOld;
 use App\Form\Type\TaskType;
 use App\Services\SayHello;
+use Doctrine\ORM\EntityManagerInterface;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,7 +72,7 @@ class DemoController extends AbstractController
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
    */
-    public function addTask(Request $request, SessionInterface $session)
+    public function addTask(Request $request, SessionInterface $session, EntityManagerInterface $entityManager)
     {
       $task = new Task();
 
@@ -80,25 +83,30 @@ class DemoController extends AbstractController
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
-        $file = $task->getImage();
+        // $file = $task->getImage();
 
-        $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+        // $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
 
         // Move the file to the directory where brochures are stored
         try {
+          $entityManager->persist($task);
+          $entityManager->flush();
+          /*
           $file->move(
             $this->getParameter('images_directory'),
             $fileName
           );
+          */
         } catch (FileException $e) {
           // ... handle exception if something happens during file upload
         }
 
         // updates the 'brochure' property to store the PDF file name
         // instead of its contents
-        $task->setImage($fileName);
+        // $task->setImage($fileName);
 
-        $session->set('task', $form->getData());
+        // $session->set('task', $form->getData());
+
         return $this->redirectToRoute('show_task');
       }
 
@@ -108,14 +116,16 @@ class DemoController extends AbstractController
     }
 
   /**
-   * @Route("/show-task", name="show_task")
-   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   * @Route("/show-task/{taskId}", name="show_task")
+   * @param $taskId
+   *
+   * @param \Doctrine\ORM\EntityManagerInterface $entityManager
    *
    * @return \Symfony\Component\HttpFoundation\Response
    */
-    public function showTask(SessionInterface $session)
+    public function showTask($taskId, EntityManagerInterface $entityManager)
     {
-      $task = $session->get('task');
+      $task = $entityManager->find(Task::class, $taskId);
       return $this->render('demo/show_task.html.twig', [
         'task' => $task,
       ]);

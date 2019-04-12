@@ -26,12 +26,13 @@ class TaskType extends AbstractType
       ->add('name', TextType::class, [
         'required' => false,
       ])
-      ->add('dueDate', DateType::class, [
+      ->add('date', DateType::class, [
         'constraints' => New GreaterThan('today'),
         'attr' => [
           'class' => $options['classFromController']
         ]
       ])
+      /*
       ->add('priority', ChoiceType::class, [
         'choices' => array_reverse($priority)
       ])
@@ -39,6 +40,7 @@ class TaskType extends AbstractType
         'label' => 'Image'
       ])
       ->add('author', AuthorType::class)
+      */
       ->add('save', SubmitType::class);
   }
 
